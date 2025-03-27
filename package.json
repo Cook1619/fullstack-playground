@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "name": "fullstack-playground",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "concurrently \"npm start --prefix server\" \"npm start --prefix client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
