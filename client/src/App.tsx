@@ -30,13 +30,21 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>Occurrences of Fizz, Buzz, and FizzBuzz:</p>
-        <ul>
-          <li>Fizz: {counts.Fizz}</li>
-          <li>Buzz: {counts.Buzz}</li>
-          <li>FizzBuzz: {counts.FizzBuzz}</li>
-        </ul>
+        <div className="card-container">
+          <div className="card">
+            <h3>Fizz</h3>
+            <p>{counts.Fizz}</p>
+          </div>
+          <div className="card">
+            <h3>Buzz</h3>
+            <p>{counts.Buzz}</p>
+          </div>
+          <div className="card">
+            <h3>FizzBuzz</h3>
+            <p>{counts.FizzBuzz}</p>
+          </div>
+        </div>
       </header>
     </div>
   );
