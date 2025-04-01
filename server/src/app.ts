@@ -1,6 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
+import tasksRoutes from './routes/tasks.router'
 
 const app = express()
 const PORT = 3001
@@ -21,6 +22,8 @@ app.get('/api/random', (req, res) => {
     });
     res.json(result);
 });
+
+app.use('/tasks')
 
 // Start the server
 app.listen(PORT, () => {
