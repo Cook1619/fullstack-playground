@@ -1,10 +1,11 @@
 import express from 'express'
-import * as taskController from '../controllers/tasks.controller'
+import * as tasksController from '../controllers/tasks.controller'
 
 const router = express.Router()
 
 // root tasks route
-router.get('/', taskController.getTasks)
-router.get('/:id', taskController.getTaskById)
+router.get('/', tasksController.getTasks)
+router.get('/search', tasksController.searchTasks)
+router.get('/:id', tasksController.getTaskById)
 
 export default router;
