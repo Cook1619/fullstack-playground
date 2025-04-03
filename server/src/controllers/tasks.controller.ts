@@ -18,3 +18,15 @@ export const getTaskById = (req: Request, res: Response) => {
         res.status(404).send({ message: `Task with ID ${id} not found` })
     }
 }
+
+export const searchTasks = (req: Request, res: Response) => {
+    const { name, completed, inProgress } = req.query
+
+    const filteredTasks = tasksService.searchTasks({
+        name: name as string,
+        completed: completed as string,
+        inProgress: inProgress as string,
+    });
+
+    res.send(filteredTasks)
+}
