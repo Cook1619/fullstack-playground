@@ -5,7 +5,12 @@
   "name": "fullstack-playground",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "supertest": "^7.1.0",
+    "ts-jest": "^29.3.1"
+  },
   "scripts": {
     "start": "concurrently \"npm start --prefix server\" \"npm start --prefix client\""
   },
