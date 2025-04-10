@@ -1,5 +1,6 @@
 import { Task, tasksModel } from '../models/tasks.model'
 
+// This is just a mock approach before storing records in a DB mimmicking actual DB indexes
 const nameIndex: Record<string, Task[]> = {}
 const completedIndex: Record<string, Task[]> = { true: [], false: [] }
 const inProgressIndex: Record<string, Task[]> = { true: [], false: [] }
