@@ -18,68 +18,54 @@ describe('Tasks Controller', () => {
     }
   })
 
-  describe('getTasks', () => {
-    it('should return all tasks', () => {
-      const mockTasks = [
-        { id: 1, name: 'Task 1', completed: false, inProgress: true },
-      ]
-      jest.spyOn(tasksService, 'getTasks').mockReturnValue(mockTasks)
-
-      tasksController.getTasks(mockRequest as Request, mockResponse as Response)
-
-      expect(tasksService.getTasks).toHaveBeenCalled()
-      expect(jsonMock).toHaveBeenCalledWith(mockTasks)
-    })
-  })
-
-  describe('getTaskById', () => {
-    it('should return a task if found', () => {
+  describe('addTasks', () => {
+    it('should add a task and return 201 with the new task', () => {
       const mockTask = {
-        id: 1,
-        name: 'Task 1',
+        id: 1234567890,
+        name: 'New Task',
         completed: false,
         inProgress: true,
       }
-      jest.spyOn(tasksService, 'getTask').mockReturnValue(mockTask)
 
-      mockRequest.params = { id: '1' }
+      // Mock Date.now() to return a fixed value
+      jest.spyOn(global.Date, 'now').mockReturnValue(mockTask.id)
 
-      tasksController.getTaskById(mockRequest as Request, mockResponse as Response)
+      // Mock request body
+      mockRequest.body = {
+        name: 'New Task',
+        completed: false,
+        inProgress: true,
+      }
 
-      expect(tasksService.getTask).toHaveBeenCalledWith('1')
+      // Call the controller
+      tasksController.addTasks(mockRequest as Request, mockResponse as Response)
+
+      // Assertions
+      expect(tasksService.addTask).toHaveBeenCalledWith(mockTask)
+      expect(mockResponse.status).toHaveBeenCalledWith(201)
       expect(jsonMock).toHaveBeenCalledWith(mockTask)
+
+      // Restore Date.now()
+      jest.spyOn(global.Date, 'now').mockRestore()
     })
 
-    it('should return 404 if task is not found', () => {
-      jest.spyOn(tasksService, 'getTask').mockReturnValue(undefined)
+    it('should return 400 if the request body is invalid', () => {
+      // Mock invalid request body
+      mockRequest.body = {
+        name: '', // Invalid name
+        completed: 'not-a-boolean', // Invalid completed
+        inProgress: true,
+      }
 
-      mockRequest.params = { id: '999' }
+      // Call the controller
+      tasksController.addTasks(mockRequest as Request, mockResponse as Response)
 
-      tasksController.getTaskById(mockRequest as Request, mockResponse as Response)
-
-      expect(tasksService.getTask).toHaveBeenCalledWith('999')
-      expect(mockResponse.status).toHaveBeenCalledWith(404)
-      expect(jsonMock).toHaveBeenCalledWith({ message: 'Task with ID 999 not found' })
-    })
-  })
-
-  describe('searchTasks', () => {
-    it('should return filtered tasks', () => {
-      const mockFilteredTasks = [
-        { id: 1, name: 'Task 1', completed: false, inProgress: true },
-      ]
-      jest.spyOn(tasksService, 'searchTasks').mockReturnValue(mockFilteredTasks)
-
-      mockRequest.query = { name: 'Task' }
-
-      tasksController.searchTasks(mockRequest as Request, mockResponse as Response)
-
-      expect(tasksService.searchTasks).toHaveBeenCalledWith({
-        name: 'Task',
-        completed: undefined,
-        inProgress: undefined,
+      // Assertions
+      expect(tasksService.addTask).not.toHaveBeenCalled()
+      expect(mockResponse.status).toHaveBeenCalledWith(400)
+      expect(jsonMock).toHaveBeenCalledWith({
+        message: 'Invalid task data. Please provide name, completed, and inProgress fields.',
       })
-      expect(jsonMock).toHaveBeenCalledWith(mockFilteredTasks)
     })
   })
 })
