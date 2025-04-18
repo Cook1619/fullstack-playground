@@ -3,7 +3,7 @@ import * as tasksService from '../services/tasksService'
 import redisClient from '../redisClient'
 
 
-export const addTasks = (req: Request, res: Response) => {
+export const addTasks = async (req: Request, res: Response): Promise<Response | void> => {
     const { name, completed, inProgress } = req.body
 
     // Validate the request body
@@ -20,14 +20,14 @@ export const addTasks = (req: Request, res: Response) => {
     }
 
     // Add the task using the service
-    tasksService.addTask(newTask)
+    await tasksService.addTask(newTask)
 
     // Return the newly created task
     res.status(201).send(newTask)
 }
 
 
-export const getTasks = async (req: Request, res: Response) => {
+export const getTasks = async (req: Request, res: Response): Promise<Response | void> => {
     const cacheKey = 'tasks:getAll'
 
     // Check if data exists in Redis cache
@@ -38,7 +38,7 @@ export const getTasks = async (req: Request, res: Response) => {
     }
 
     // Fetch tasks from the service
-    const data = tasksService.getTasks()
+    const data = await tasksService.getTasks()
 
     // Store the result in Redis cache with a 60-second expiration
     await redisClient.set(cacheKey, JSON.stringify(data), { EX: 60 })
@@ -48,9 +48,9 @@ export const getTasks = async (req: Request, res: Response) => {
 }
 
 
-export const getTaskById = (req: Request, res: Response) => {
+export const getTaskById = async (req: Request, res: Response): Promise<Response | void> => {
     const { id } = req.params
-    const task = tasksService.getTask(id)
+    const task = await tasksService.getTask(id)
 
     if (task) {
         res.send(task)
